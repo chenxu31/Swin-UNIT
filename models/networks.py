@@ -6,8 +6,8 @@ import os
 import functools
 from torch.optim import lr_scheduler
 import numpy as np
-from .stylegan_networks import StyleGAN2Discriminator, StyleGAN2Generator, TileStyleGAN2Discriminator
-from .fgcut_networks import FgCUT, FgCUT_GRU
+#from .stylegan_networks import StyleGAN2Discriminator, StyleGAN2Generator, TileStyleGAN2Discriminator
+#from .fgcut_networks import FgCUT, FgCUT_GRU
 from .swinunit_networks import SwinUnit, MsDis
 
 ###############################################################################

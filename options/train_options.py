@@ -1,3 +1,5 @@
+from random import choices
+
 from .base_options import BaseOptions
 
 
@@ -27,6 +29,9 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--continue_train', action='store_true', help='continue training: load the latest model')
         parser.add_argument('--phase', type=str, default='train', help='train, val, test, etc')
         parser.add_argument('--pretrained_name', type=str, default=None, help='resume training from another checkpoint')
+
+        parser.add_argument('--task', type=str, default="pelvic", choices=["pelvic", "cmf"], help='frequency of showing training results on screen')
+        parser.add_argument('--debug', type=int, default=0, help='frequency of showing training results on screen')
 
         # training parameters
         parser.add_argument('--n_epochs', type=int, default=25, help='number of epochs with the initial learning rate')
