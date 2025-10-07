@@ -1469,7 +1469,7 @@ class GroupedChannelNorm(nn.Module):
 # Flow extraction networks
 ##################################################################################
 from mmcv.cnn import ConvModule
-from mmcv.runner import load_checkpoint
+from mmengine.runner import load_checkpoint
 import util.util as util
 
 class SPyNet(nn.Module):
