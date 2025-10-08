@@ -42,7 +42,7 @@ if __name__ == '__main__':
     else:
         assert 0
 
-    if args.debug:
+    if opt.debug:
         val_data_s = val_data_s[:1]
         val_data_t = val_data_t[:1]
 
