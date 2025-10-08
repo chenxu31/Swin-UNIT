@@ -29,16 +29,16 @@ if __name__ == '__main__':
     #dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
     #dataset_size = len(dataset)    # get the number of images in the dataset.
 
-    if opt["task"] == "pelvic":
+    if opt.task == "pelvic":
         common_file = common_pelvic
-        dataset_s = common_pelvic.Dataset(opt["dataroot"], "ct", n_slices=opt["input_nc"], debug=opt.debug)
-        dataset_t = common_pelvic.Dataset(opt["dataroot"], "cbct", n_slices=opt["input_nc"], debug=opt.debug)
-        val_data_s, val_data_t, _, _ = common_pelvic.load_val_data(opt["data_dir"], valid=True)
-    elif opt["task"] == "cmf":
+        dataset_s = common_pelvic.Dataset(opt.dataroot, "ct", n_slices=opt.input_nc, debug=opt.debug)
+        dataset_t = common_pelvic.Dataset(opt.dataroot, "cbct", n_slices=opt.input_nc, debug=opt.debug)
+        val_data_s, val_data_t, _, _ = common_pelvic.load_val_data(opt.dataroot, valid=True)
+    elif opt.task == "cmf":
         common_file = common_amos
-        dataset_s = common_cmf.Dataset(opt["dataroot"], modality="ct", n_slices=opt["input_nc"], debug=opt.debug)
-        dataset_t = common_cmf.Dataset(opt["dataroot"], modality="mr", n_slices=opt["input_nc"], debug=opt.debug)
-        val_data_t, val_data_s, _ = common_cmf.load_test_data(args.data_dir)
+        dataset_s = common_cmf.Dataset(opt.dataroot, modality="ct", n_slices=opt.input_nc, debug=opt.debug)
+        dataset_t = common_cmf.Dataset(opt.dataroot, modality="mr", n_slices=opt.input_nc, debug=opt.debug)
+        val_data_t, val_data_s, _ = common_cmf.load_test_data(opt.dataroot)
     else:
         assert 0
 
@@ -46,9 +46,9 @@ if __name__ == '__main__':
         val_data_s = val_data_s[:1]
         val_data_t = val_data_t[:1]
 
-    patch_shape = (opt["input_nc"], dataset_s.patch_height, dataset_s.patch_width)
-    dataloader_s = torch.utils.data.DataLoader(dataset_s, batch_size=opt["batch_size"], shuffle=True, pin_memory=True, drop_last=True)
-    dataloader_t = torch.utils.data.DataLoader(dataset_t, batch_size=opt["batch_size"], shuffle=True, pin_memory=True, drop_last=True)
+    patch_shape = (opt.input_nc, dataset_s.patch_height, dataset_s.patch_width)
+    dataloader_s = torch.utils.data.DataLoader(dataset_s, batch_size=opt.batch_size, shuffle=True, pin_memory=True, drop_last=True)
+    dataloader_t = torch.utils.data.DataLoader(dataset_t, batch_size=opt.batch_size, shuffle=True, pin_memory=True, drop_last=True)
 
 
     model = create_model(opt)      # create a model given opt.model and other options
@@ -81,7 +81,7 @@ if __name__ == '__main__':
                 "B": data_s["image"],
             }
 
-            #batch_size = opt["batch_size"]
+            #batch_size = opt.batch_size
             #total_iters += batch_size
             #epoch_iter += batch_size
             if len(opt.gpu_ids) > 0:
