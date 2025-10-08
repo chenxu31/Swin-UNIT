@@ -115,7 +115,34 @@ class SwinUNITModel(BaseModel):
             # initialize vgg
             if opt.lambda_vgg > 0.0:  
                 self.netVGG = networks.Vgg16()
-                self.netVGG.load_state_dict(torch.load(opt.vgg_pth))
+
+                # 1. 加载官方的预训练权重字典
+                official_state_dict = torch.load(opt.vgg_pth, map_location=lambda storage, loc: storage, weights_only=True)
+
+                # 2. 定义官方 features 索引到你的 conv 层名称的映射
+                # 官方 VGG16 features 中 Conv2d 层的索引顺序
+                official_conv_indices = [0, 2, 5, 7, 10, 12, 14, 17, 19, 21, 24, 26, 28]
+                # 你模型中对应的 conv 层名称
+                your_conv_names = [
+                    'conv1_1', 'conv1_2',
+                    'conv2_1', 'conv2_2',
+                    'conv3_1', 'conv3_2', 'conv3_3',
+                    'conv4_1', 'conv4_2', 'conv4_3',
+                    'conv5_1', 'conv5_2', 'conv5_3'
+                ]
+
+                # 3. 创建新的状态字典
+                new_state_dict = {}
+                for idx, your_name in zip(official_conv_indices, your_conv_names):
+                    # 权重
+                    new_state_dict[your_name + '.weight'] = official_state_dict[f'features.{idx}.weight']
+                    # 偏置
+                    new_state_dict[your_name + '.bias'] = official_state_dict[f'features.{idx}.bias']
+
+                # 4. 加载到你的模型
+                self.netVGG.load_state_dict(new_state_dict)
+
+                #self.netVGG.load_state_dict(torch.load(opt.vgg_pth))
                 self.netVGG.eval()
                 for param in self.netVGG.parameters():
                     param.requires_grad = False
